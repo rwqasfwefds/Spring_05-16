@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--DeptDao에 @Mapper 어노테이션이랑 연동되게 하는 태그가 mapper태그-->
+<!--namespace = 밑에 있는 id의 메소드가 어디에 있는지 표시하는 쉨-->
+<mapper namespace="com.example.myservice.dao.DeptDao">
+    <!--selectList = 메소드 명-->
+    <!--parameterType = 매개변수 타입(풀네임으로 적어줘야 함)-->
+    <!--resultType = 반환 타입(풀네임으로 적어줘야 함)-->
+    <!--selectList 메소드에 매개변수타입으로 Dept가 들어오고 반환값이 Dept임-->
+<!--  지금 상황에서는 parameterType를 적어 줄 필요가 없음 DeptDao 안에 selectList 메소드에 매개변수가 없으니깐  -->
+<!--  근데 myBatis에는 항상 이 두개를 세트처럼 적어 줌 그래서 그냥 적어준다라는 것 같음 일단 지금 우리가 할려고 하는 거엔 필요가 없는 놈이긴 함  -->
+    <select id="selectAll" parameterType="com.example.myservice.model.Dept"
+            resultType="com.example.myservice.model.Dept">
+        SELECT DNO
+             , DNAME
+             , LOC
+        FROM DEPARTMENT
+    </select>
+
+    <select id="selectById" parameterType="int"
+            resultType="com.example.myservice.model.Dept">
+        SELECT DNO
+             , DNAME
+             , LOC
+        FROM DEPARTMENT
+        WHERE DNO = #{dno}
+    </select>
+<!--keyProperty = 셀렉트키 안에있는 실행문의 시퀀스를 적용 할 새끼,-->
+<!--resultType = 반환 값(시퀀스 반환 값은 인트), order = 밑에있는 쿼리가 실행되기전에 실행해라(실행순서 : before)-->
+<!--mybatis 문법 #{dno}라고 하면 첫번째 자리에는 dno에 들어가고 이런식으로 각각 맞게 들어감-->
+
+    <insert id="insert" parameterType="com.example.myservice.model.Dept">
+        <selectKey keyProperty="dno" resultType="int" order="BEFORE">
+            SELECT SQ_DEPT.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO DEPARTMENT(DNO, DNAME, LOC)
+        VALUES (#{dno}, #{dname}, #{loc})
+    </insert>
+
+    <update id="update" parameterType="com.example.myservice.model.Dept">
+        UPDATE DEPARTMENT
+        SET DNAME = #{dname},
+            LOC = #{loc}
+        WHERE DNO = #{dno}
+    </update>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--DeptDao에 @Mapper 어노테이션이랑 연동되게 하는 태그가 mapper태그-->
+<!--namespace = 밑에 있는 id의 메소드가 어디에 있는지 표시하는 쉨-->
+<!--namaspace = 접근 할려고 하는 클래스 명-->
+<!--myBatis는 쿼리문을 xml로 다 빼서 인터페이스로 만든다고 했잖슴? 그 구현을 여기서 구현하는거임 ㅇㅋ?-->
+<mapper namespace="com.example.myservice.dao.BoardDao">
+    <!--selectList = 메소드 명-->
+    <!--parameterType = 매개변수 타입(풀네임으로 적어줘야 함)-->
+    <!--resultType = 반환 타입(풀네임으로 적어줘야 함)-->
+    <!--selectList 메소드에 매개변수타입으로 Dept가 들어오고 반환값이 Dept임-->
+<!--  지금 상황에서는 parameterType를 적어 줄 필요가 없음 DeptDao 안에 selectList 메소드에 매개변수가 없으니깐  -->
+<!--  근데 myBatis에는 항상 이 두개를 세트처럼 적어 줌 그래서 그냥 적어준다라는 것 같음 일단 지금 우리가 할려고 하는 거엔 필요가 없는 놈이긴 함  -->
+<!--application.properties에 스네이크 표기법을 카멜 표기법으로 자동으로 바꾸는 코딩을 해놔서 AS...안 적어 줘도 됨-->
+    <select id="selectAll" parameterType="com.example.myservice.model.Board"
+            resultType="com.example.myservice.model.Board">
+        SELECT IDX AS idx,
+               TITLE AS title,
+               CONTENT AS content,
+               WRITER AS writer,
+               VIEW_CNT AS viewCnt,
+               NOTICE_YN AS noticeYn,
+               SECRET_YN AS secretYn,
+               DELETE_YN AS deleteYn,
+               INSERT_TIME AS insertTime,
+               UPDATE_TIME AS updateTime,
+               DELETE_TIME AS deleteTime
+        FROM TB_BOARD
+    </select>
+<!--mybatis 문법 #{dno}라고 하면 첫번째 자리에는 dno에 들어가고 이런식으로 각각 맞게 들어감-->
+
+    <insert id="insert" parameterType="com.example.myservice.model.Board">
+        <selectKey keyProperty="idx" resultType="int" order="BEFORE">
+            SELECT SQ_TB_BOARD.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TB_BOARD(
+                IDX,
+                TITLE,
+                CONTENT,
+                WRITER,
+                VIEW_CNT,
+                NOTICE_YN,
+                SECRET_YN,
+                DELETE_YN,
+                INSERT_TIME,
+                UPDATE_TIME,
+                DELETE_TIME
+        )VALUES (
+                #{idx},
+                #{title},
+                #{content},
+                #{writer},
+                #{viewCnt},
+                #{noticeYn},
+                #{secretYn},
+                #{deleteYn},
+                #{insertTime},
+                #{updateTime},
+                #{deleteTime}
+                )
+    </insert>
+</mapper>

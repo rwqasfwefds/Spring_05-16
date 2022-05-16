@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.myservice.dao.EmpDao">
+    <select id="selectAll" parameterType="com.example.myservice.model.Emp"
+            resultType="com.example.myservice.model.Emp">
+        SELECT ENO
+             , ENAME
+             , JOB
+             , MANAGER
+             , HIREDATE
+             , SALARY
+             , COMMISSION
+             , DNO
+        FROM EMP
+    </select>
+
+    <insert id="insert" parameterType="com.example.myservice.model.Emp">
+        <selectKey keyProperty="eno" resultType="int" order="BEFORE">
+            SELECT SQ_EMP2.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO EMP(ENO, ENAME, JOB, MANAGER, HIREDATE, SALARY, COMMISSION, DNO)
+        VALUES (#{ENO}, #{ENAME}, #{JOB}, #{MANAGER}, #{HIREDATE}, #{SALARY}, #{COMMISSION}, #{DNO})
+    </insert>
+</mapper>
